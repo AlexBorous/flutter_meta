@@ -20,7 +20,7 @@ class FlutterMetaSdkPlugin: FlutterPlugin, MethodCallHandler {
   private lateinit var anonymousId: String
   private lateinit var context: Context
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(
       flutterPluginBinding.binaryMessenger,
       "solusibejo.com/flutter_meta_sdk"
@@ -34,7 +34,7 @@ class FlutterMetaSdkPlugin: FlutterPlugin, MethodCallHandler {
     context = flutterPluginBinding.applicationContext
   }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
   }
 
