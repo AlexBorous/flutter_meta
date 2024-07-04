@@ -2,6 +2,7 @@ package com.solusibejo.flutter_meta_sdk
 
 import android.content.Context
 import androidx.annotation.NonNull
+import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -28,6 +29,7 @@ class FlutterMetaSdkPlugin: FlutterPlugin, MethodCallHandler {
     channel.setMethodCallHandler(this)
 
     appEventsLogger = AppEventsLogger.newLogger(flutterPluginBinding.applicationContext)
+
     anonymousId =
       AppEventsLogger.getAnonymousAppDeviceGUID(flutterPluginBinding.applicationContext)
 
@@ -52,6 +54,7 @@ class FlutterMetaSdkPlugin: FlutterPlugin, MethodCallHandler {
         call,
         result
       )
+      "setIsDebugEnabled" -> FlutterMetaSdkMethods.setIsDebugEnabled(call, result)
       "setUserID" -> FlutterMetaSdkMethods.setUserId(call, result)
       "setAutoLogAppEventsEnabled" -> FlutterMetaSdkMethods.setAutoLogAppEventsEnabled(
         call,

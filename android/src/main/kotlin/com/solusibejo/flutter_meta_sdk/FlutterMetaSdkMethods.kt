@@ -2,6 +2,7 @@ package com.solusibejo.flutter_meta_sdk
 
 import android.os.Bundle
 import com.facebook.FacebookSdk
+import com.facebook.LoggingBehavior
 import com.facebook.appevents.AppEventsConstants
 import com.facebook.appevents.AppEventsLogger
 import io.flutter.plugin.common.MethodCall
@@ -9,7 +10,10 @@ import io.flutter.plugin.common.MethodChannel
 import java.util.*
 
 object FlutterMetaSdkMethods {
-    fun activateApp(appEventsLogger: AppEventsLogger, result: MethodChannel.Result) {
+    fun activateApp(
+        appEventsLogger: AppEventsLogger,
+        result: MethodChannel.Result,
+    ) {
         appEventsLogger.logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP)
         result.success(null)
     }
@@ -19,7 +23,10 @@ object FlutterMetaSdkMethods {
         result.success(null)
     }
 
-    fun setUserData(call: MethodCall, result: MethodChannel.Result) {
+    fun setUserData(
+        call: MethodCall,
+        result: MethodChannel.Result,
+    ) {
         val parameters = call.argument("parameters") as? Map<String, Any>
         val parameterBundle = createBundleFromMap(parameters)
 
@@ -33,7 +40,7 @@ object FlutterMetaSdkMethods {
             parameterBundle?.getString("city"),
             parameterBundle?.getString("state"),
             parameterBundle?.getString("zip"),
-            parameterBundle?.getString("country")
+            parameterBundle?.getString("country"),
         )
 
         result.success(null)
@@ -44,25 +51,38 @@ object FlutterMetaSdkMethods {
         result.success(null)
     }
 
-    fun flush(appEventsLogger: AppEventsLogger, result: MethodChannel.Result) {
+    fun flush(
+        appEventsLogger: AppEventsLogger,
+        result: MethodChannel.Result,
+    ) {
         appEventsLogger.flush()
         result.success(null)
     }
 
-    fun getApplicationId(appEventsLogger: AppEventsLogger, result: MethodChannel.Result) {
+    fun getApplicationId(
+        appEventsLogger: AppEventsLogger,
+        result: MethodChannel.Result,
+    ) {
         result.success(appEventsLogger.applicationId)
     }
 
-    fun getAnonymousId(anonymousId: String, result: MethodChannel.Result) {
+    fun getAnonymousId(
+        anonymousId: String,
+        result: MethodChannel.Result,
+    ) {
         result.success(anonymousId)
     }
 
-    //not an android implementation as of yet
+    // not an android implementation as of yet
     fun setAdvertiserTracking(result: MethodChannel.Result) {
         result.success(null)
     }
 
-    fun logEvent(appEventsLogger: AppEventsLogger, call: MethodCall, result: MethodChannel.Result) {
+    fun logEvent(
+        appEventsLogger: AppEventsLogger,
+        call: MethodCall,
+        result: MethodChannel.Result,
+    ) {
         val eventName = call.argument("name") as? String
         val parameters = call.argument("parameters") as? Map<String, Any>
         val valueToSum = call.argument("_valueToSum") as? Double
@@ -85,7 +105,7 @@ object FlutterMetaSdkMethods {
     fun pushNotificationOpen(
         appEventsLogger: AppEventsLogger,
         call: MethodCall,
-        result: MethodChannel.Result
+        result: MethodChannel.Result,
     ) {
         val action = call.argument("action") as? String
         val payload = call.argument("payload") as? Map<String, Any>
@@ -100,7 +120,24 @@ object FlutterMetaSdkMethods {
         result.success(null)
     }
 
-    fun setUserId(call: MethodCall, result: MethodChannel.Result) {
+    fun setIsDebugEnabled(
+        call: MethodCall,
+        result: MethodChannel.Result,
+    ) {
+        val enabled = call.arguments as Boolean
+        FacebookSdk.setIsDebugEnabled(enabled)
+        if (enabled) {
+            FacebookSdk.addLoggingBehavior(LoggingBehavior.REQUESTS)
+        } else {
+            FacebookSdk.removeLoggingBehavior(LoggingBehavior.REQUESTS)
+        }
+        result.success(null)
+    }
+
+    fun setUserId(
+        call: MethodCall,
+        result: MethodChannel.Result,
+    ) {
         val id = call.arguments as String
         AppEventsLogger.setUserID(id)
         result.success(null)
@@ -119,25 +156,31 @@ object FlutterMetaSdkMethods {
                 is String -> {
                     bundle.putString(key, value)
                 }
+
                 is Int -> {
                     bundle.putInt(key, value)
                 }
+
                 is Long -> {
                     bundle.putLong(key, value)
                 }
+
                 is Double -> {
                     bundle.putDouble(key, value)
                 }
+
                 is Boolean -> {
                     bundle.putBoolean(key, value)
                 }
+
                 is Map<*, *> -> {
                     val nestedBundle = createBundleFromMap(value as Map<String, Any>)
                     bundle.putBundle(key, nestedBundle as Bundle)
                 }
+
                 else -> {
                     throw IllegalArgumentException(
-                        "Unsupported value type: " + value.javaClass.kotlin
+                        "Unsupported value type: " + value.javaClass.kotlin,
                     )
                 }
             }
@@ -145,13 +188,19 @@ object FlutterMetaSdkMethods {
         return bundle
     }
 
-    fun setAutoLogAppEventsEnabled(call: MethodCall, result: MethodChannel.Result) {
+    fun setAutoLogAppEventsEnabled(
+        call: MethodCall,
+        result: MethodChannel.Result,
+    ) {
         val enabled = call.arguments as Boolean
         FacebookSdk.setAutoLogAppEventsEnabled(enabled)
         result.success(null)
     }
 
-    fun setDataProcessingOptions(call: MethodCall, result: MethodChannel.Result) {
+    fun setDataProcessingOptions(
+        call: MethodCall,
+        result: MethodChannel.Result,
+    ) {
         val options = call.argument("options") as? ArrayList<String> ?: arrayListOf()
         val country = call.argument("country") as? Int ?: 0
         val state = call.argument("state") as? Int ?: 0
@@ -163,7 +212,7 @@ object FlutterMetaSdkMethods {
     fun purchased(
         appEventsLogger: AppEventsLogger,
         call: MethodCall,
-        result: MethodChannel.Result
+        result: MethodChannel.Result,
     ) {
         val amount = (call.argument("amount") as? Double)?.toBigDecimal()
         val currency = Currency.getInstance(call.argument("currency") as? String)

@@ -57,6 +57,8 @@ public class SwiftFlutterMetaSdkPlugin: NSObject, FlutterPlugin {
                 break
             case "logEvent":
                 FlutterMetaSdkMethods.logEvent(call, result: result)
+            case "setIsDebugEnabled":
+                FlutterMetaSdkMethods.setIsDebugEnabled(call, result: result)
                 break
             case "logPushNotificationOpen":
                 FlutterMetaSdkMethods.pushNotificationOpen(call, result: result)

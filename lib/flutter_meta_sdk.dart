@@ -240,6 +240,12 @@ class FlutterMetaSdk {
     return _channel.invokeMethod<void>('setAutoLogAppEventsEnabled', enabled);
   }
 
+  /// Enables logging
+  ///
+  Future<void> setIsDebugEnabled(bool enabled) {
+    return _channel.invokeMethod<void>('setIsDebugEnabled', enabled);
+  }
+
   /// Set Data Processing Options
   /// This is needed for California Consumer Privacy Act (CCPA) compliance
   ///

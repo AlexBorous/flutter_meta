@@ -78,6 +78,16 @@ class FlutterMetaSdkMethods {
 
         result(nil)
     }
+    
+    static func setIsDebugEnabled(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let isDebug = call.arguments as! Bool
+        if isDebug {
+            Settings.shared.enableLoggingBehavior(.networkRequests)
+        } else {
+            Settings.shared.disableLoggingBehavior(.networkRequests)
+        }
+        result(nil)
+    }
 
     static func setUserId(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let id = call.arguments as! String
