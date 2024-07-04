@@ -8,7 +8,8 @@
 import Foundation
 import FBSDKCoreKit
 import FBSDKCoreKit_Basics
-import FBAudienceNetwork
+import AppTrackingTransparency
+
 
 class FlutterMetaSdkMethods {
     static func clearUserData(result: @escaping FlutterResult) {
@@ -113,9 +114,7 @@ class FlutterMetaSdkMethods {
 
     static func setAdvertiserTracking(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let arguments = call.arguments as? [String: Any] ?? [String: Any]()
-        let enabled = arguments["enabled"] as! Bool
         let collectId = arguments["collectId"] as! Bool
-        Settings.shared.isAdvertiserTrackingEnabled = enabled
         Settings.shared.isAdvertiserIDCollectionEnabled = collectId
         result(nil)
     }
